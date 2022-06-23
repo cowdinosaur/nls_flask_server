@@ -1,0 +1,16 @@
+body {
+  font-size: 32px;
+  background-color: #000000;
+  color: #FFFFFF;
+  text-align: center;
+  height: 100vh;
+}
+
+#content {
+  padding: 3em;
+}
+
+#date {
+  position: absolute;
+  bottom: 20px;
+}

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+   <head>
+      <link href="../static/style.css" rel="stylesheet">
+      <script>
+         function refresh() {
+           // make Ajax call here, inside the callback call:
+           var xhr = new XMLHttpRequest();
+
+           // Making our connection
+           var url = '/get/channel_1'
+           xhr.open("GET", url, true);
+
+           // function execute after request is successful
+           xhr.onreadystatechange = function () {
+              if (this.readyState == 4 && this.status == 200) {
+                 let response = JSON.parse(this.responseText);
+                 //console.log(response['value']);
+                 let d = new Date()
+                 document.getElementById("refreshTime").innerHTML = d.toLocaleString();
+                 document.getElementById("soilMoistureReading").innerHTML = response['value'];
+                 let value = parseInt(response['value'], 10)
+                 let message = "No updates"
+                 if (value < 80) {
+                    message = "Please water me"
+                 }
+                 document.getElementById("message").innerHTML = message;
+              }
+           }
+           // Sending our request
+           xhr.send();
+
+           setTimeout(refresh, 5000);
+
+        }
+
+        // initial call, or just call refresh directly
+        setTimeout(refresh, 5000);
+      </script>
+   </head>
+   <body>
+      <div id="content">
+         <h2>Northland Secondary Smart Watering System</h2>
+         <h1 id="message">Please water me!</h1>
+         <h2>Soil moisture reading: <span id="soilMoistureReading">{{ state }}</h2>
+         <p id="date">Last page refresh: <span id="refreshTime">{{ time }}</span><p>
+      </div>
+   </body>
+</html>
+
