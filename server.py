@@ -1,6 +1,7 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 import datetime
 import random
+import json
 
 app = Flask(__name__)
 state = {}
@@ -21,6 +22,24 @@ def post_data(channel_id, value):
     global state
     state[channel_id] = value
     return 'OK'
+
+@app.route('/update/', methods=['GET'])
+def recdata():
+    tid=request.args.get('id')
+    tdata=request.args.get('data')
+    global state
+    #print (tid,tdata)
+    state[tid] = tdata
+    return jsonify({'data': tdata}), 201
+
+@app.route('/update/', methods=['POST'])
+def postdata():
+    record = json.loads(request.data)
+    global state
+    print (record['id'],record['data'])
+    state[record['id']] = record['data']
+    return jsonify({'data': record['data']}), 201
+
 
 @app.route('/get/<channel_id>')
 def get_data(channel_id):
