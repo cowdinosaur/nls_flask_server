@@ -1,6 +1,6 @@
 <!DOCTYPE html>
    <head>
-      <link href="../static/style.css" rel="stylesheet">
+      <link href="../static/style.css?3" rel="stylesheet">
       <script>
          function refresh() {
            // make Ajax call here, inside the callback call:
@@ -19,11 +19,14 @@
                  document.getElementById("refreshTime").innerHTML = d.toLocaleString();
                  document.getElementById("soilMoistureReading").innerHTML = response['value'];
                  let value = parseInt(response['value'], 10)
-                 let message = "No updates"
-                 if (value < 80) {
-                    message = "Please water me"
+                 let messageElem = document.getElementById("message");
+                 if (value < 700) {
+                    messageElem.innerHTML  = "Please water me!"
+                    messageElem.className = "red"
+                 } else {
+                    messageElem.innerHTML = "Enough water, thank you!"
+                    messageElem.className = "green"
                  }
-                 document.getElementById("message").innerHTML = message;
               }
            }
            // Sending our request
@@ -39,8 +42,9 @@
    </head>
    <body>
       <div id="content">
-         <h2>Northland Secondary Smart Watering System</h2>
-         <h1 id="message">Please water me!</h1>
+	 <img src="../static/logo1.png"><br>
+         <h2>Gardening Made Fun Through Coding</h2>
+         <h1 id="message" class="">Please water me!</h1>
          <h2>Soil moisture reading: <span id="soilMoistureReading">{{ state }}</h2>
          <p id="date">Last page refresh: <span id="refreshTime">{{ time }}</span><p>
       </div>
